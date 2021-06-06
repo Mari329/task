@@ -1,0 +1,35 @@
+.task-container{
+  border: 2px solid red;
+  width: 50%
+}
+
+.r-1{
+  border: 2px solid blue;
+  display: flex;
+}
+
+.t-8{
+  border: 2px solid green;
+}
+
+.t-4{
+  border: 2px solid brown;
+}
+
+.button-row{
+  display: flex;
+  margin-left: auto;
+  width: fit-content
+}
+
+.task-details-row{
+  padding: 10px
+}
+
+.mar-btm-16{
+  margin-bottom: 16px;
+}
+
+.time-col{
+  margin-left: auto
+}
