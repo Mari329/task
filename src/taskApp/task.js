@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./task.css";
 import "antd/dist/antd.css";
 import { Row, Col, Input, DatePicker, Button, Select } from "antd";
@@ -7,6 +7,7 @@ import {
   PlusOutlined,
   FieldTimeOutlined
 } from "@ant-design/icons";
+import axios from "axios";
 
 const { Option } = Select;
 
@@ -35,6 +36,7 @@ function Task() {
   ]);
   const [assigne, setAssigne] = useState(["jack", "joe", "barry"]);
 
+ 
   function plusIconClicked() {
     setShowDetTask(!showDetTask);
   }
@@ -68,8 +70,8 @@ function Task() {
             </Col>
             <Col span={12} className="time-col">
               <p style={{ textAlign: "initial", margin: "0" }}>Time</p>
-              {/* <Input addonAfter={<FieldTimeOutlined />} defaultValue="mysite" /> */}
-              <Select defaultValue={"select one"} style={{ width: 120 }}>
+             
+              <Select defaultValue={"select one"} style={{ width: '100%' }}>
                 {timeArr.map((time) => (
                   <Option value={time}>{time}</Option>
                 ))}
