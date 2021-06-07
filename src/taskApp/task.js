@@ -8,10 +8,12 @@ import {
   FieldTimeOutlined
 } from "@ant-design/icons";
 import axios from "axios";
+import { connect } from "react-redux";
+import { storeLoginDetails } from '../redux/action'
 
 const { Option } = Select;
 
-function Task() {
+function Task(props) {
   const [showDetTask, setShowDetTask] = useState(true);
   const [taskDetails, setTaskDetails] = useState({
     taskDes: "",
@@ -41,7 +43,86 @@ function Task() {
     setShowDetTask(!showDetTask);
   }
 
-  function saveButtonClicked() {}
+  function saveButtonClicked() {
+   
+   
+     
+
+   
+  }
+  useEffect(()=>{
+    getAccessToken();
+  },[])
+
+  function getAccessToken() {
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',   
+    };
+    const body ={
+      'email' : 'smithcheryl@yahoo.com',
+      'password' : '12345678'
+    }
+    axios.post('https://stage.api.sloovi.com/login',body, { headers })
+      .then(response => {
+        if (response.data.code === 200){
+          console.log(response)
+          console.log(response.data)
+          getUserID(response.data.results.token)
+        
+        } else {
+          alert(response.data.message)
+        }
+      }
+        
+        );
+     
+  }
+
+  function getUserID(token) {
+  console.log('token :', token);
+    const headers = {
+      'Authorization': 'Bearer ' + token,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json', 
+    };
+    const body ={    }
+
+    axios.get('https://stage.api.sloovi.com/user', { headers })
+      .then(response => {
+        if (response.data.code === 200){
+          console.log(response)
+          console.log(response.data)
+          props.storeLoginDetails({
+            access_token: token,
+            user_id: response.data.results.user_id
+           })
+        } else {
+          alert(response.data.message)
+        }
+      }
+        
+        );
+  }
+
+  function userDropDownDisplay () {
+    const headers = {
+      'Authorization': 'Bearer ' + token,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json', 
+    };
+    axios.get('https://stage.api.sloovi.com/team', { headers })
+      .then(response => {
+        if (response.data.code === 200){
+          console.log(response)
+          console.log(response.data)
+        } else {
+          alert(response.data.message)
+        }
+      }
+        
+        );
+  }
 
   function cancelButtonClicked() {}
   return (
@@ -105,4 +186,19 @@ function Task() {
   );
 }
 
-export default Task;
+const mapStateToProps =({loginDetails})=> {
+console.log('loginDetails :', loginDetails);
+console.log('loginDetails :', loginDetails.access_details);
+  return {
+    user_id : loginDetails.access_details.user_id,
+    token : loginDetails.access_details.access_token
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeLoginDetails: (s) => { dispatch(storeLoginDetails(s)) },
+  };
+};
+
+export default connect( mapStateToProps, mapDispatchToProps) (Task);
